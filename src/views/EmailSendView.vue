@@ -153,15 +153,18 @@ const sendEmail = async () => {
   formData.append('title', emailForm.value.title);
   formData.append('content', emailForm.value.content);
   formData.append('attachment', emailForm.value.attachment);
+  let datas = []
 
   tableData.value.forEach((row, index) => {
-    formData.append(`emails[${index}][email]`, row.email);
-    formData.append(`emails[${index}][phone]`, row.phone);
+    datas.push({email:row.email,phone:row.phone});
   });
+  formData.append("statusLogsAddRequests",JSON.stringify(datas));
 
   try {
     await axios.post('/your-backend-endpoint', formData);
-    alert('Email sent successfully!');
+    alert('邮件发送成功!');
+    //数据置空
+    tableData.value = [];
   } catch (error) {
     console.error(error);
   }
